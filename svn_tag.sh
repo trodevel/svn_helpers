@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# create SVN branch automatically
+# create SVN tag automatically
 #
-# Copyright (C) 2016 Sergey Kolevatov
+# Copyright (C) 2017 Sergey Kolevatov
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,20 +18,19 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-# SKV 16c27
+# SKV 17228
 
-# 16c27 - 1.0 - initial version
-# 17228 - 1.1 - implemented using svn_tools_lib.sh
+# 17228 - 1.0 - initial version
 
-VER="1.1"
+VER="1.0"
 
 #<hb>#############################################################################
 #
-# create SVN branch automatically
+# create SVN tag automatically
 #
-# ./svn_branch.sh <path_to_folder> <branch_name> <comment>
+# ./svn_tag.sh <path_to_folder> <tag_name> <comment>
 #
-# Example: ./svn_branch.sh externals/some_lib new_feature "to implement a new feature"
+# Example: ./svn_tag.sh externals/some_lib release_version "new release"
 #
 #<he>#############################################################################
 
@@ -46,21 +45,21 @@ gl_res=""
 source svn_tools_lib.sh
 
 FOLDER=$1
-BRANCH_NAME=$2
+TAG_NAME=$2
 COMMENT=$3
 
 [[ -z "$FOLDER" ]]      && { echo; echo "ERROR: FOLDER is not defined"; show_help; exit; }
-[[ -z "$BRANCH_NAME" ]] && { echo; echo "ERROR: BRANCH_NAME is not defined"; show_help; exit; }
+[[ -z "$TAG_NAME" ]]    && { echo; echo "ERROR: TAG_NAME is not defined"; show_help; exit; }
 [[ -z "$COMMENT" ]]     && { echo; echo "ERROR: COMMENT is not defined"; show_help; exit; }
 
 [[ ! -d "$FOLDER" ]]    && { echo; echo "ERROR: folder '$FOLDER' doesn't exist"; show_help; exit; }
 
 
 echo "folder      = $FOLDER"
-echo "branch_name = $BRANCH_NAME"
+echo "tag_name    = $TAG_NAME"
 echo "comment     = $COMMENT"
 
-GEN_COMMENT="created branch. Reason: $COMMENT"
+GEN_COMMENT="$COMMENT"
 
 echo "generated comment = $GEN_COMMENT"
 
@@ -85,9 +84,9 @@ then
     exit
 fi
 
-create_branch_url "$url" "$BRANCH_NAME"
+create_tag_url "$url" "$TAG_NAME"
 new_url="$gl_res"
 
-echo "branch path       = $new_url"
+echo "tag path          = $new_url"
 
 svn cp $url $new_url -m "$GEN_COMMENT"
