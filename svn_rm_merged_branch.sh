@@ -20,6 +20,9 @@
 
 # SKV 16c28
 
+# 1.0 - 16c28 - initial commit
+# 1.1 - 17c22 - bugfix for SVN version greater than 1.8
+
 VER="1.0"
 
 #<hb>#############################################################################
@@ -46,7 +49,7 @@ get_svn_url()
 
     local res=""
 
-    res=$( LANG=C; svn info $folder | grep "^Relative URL:" | awk '{ print $2; }' )
+    res=$( LANG=C; svn info $folder | grep "^Relative URL:" | awk '{ print $3; }' )
 
     if [ -n "$res" ]
     then

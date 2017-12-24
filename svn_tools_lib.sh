@@ -21,6 +21,7 @@
 # SKV 17228
 
 # 17228 - 1.0 - initial version
+# 17c22 - 1.1 - bugfix: SVN URL was incorrectly detected for SVN version > 1.8
 
 get_svn_url()
 {
@@ -28,7 +29,7 @@ get_svn_url()
 
     local res=""
 
-    res=$( LANG=C; svn info $folder | grep "^Relative URL:" | awk '{ print $2; }' )
+    res=$( LANG=C; svn info $folder | grep "^Relative URL:" | awk '{ print $3; }' )
 
     if [ -n "$res" ]
     then
