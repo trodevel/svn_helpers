@@ -20,9 +20,17 @@
 
 # SKV 16c27
 
-VER="1.0"
+# 1.0 - 16c27 - initial commit
+# 1.1 - 18627 - corrected handling of comments containing new lines
+
+VER="1.1"
 
 # http://stackoverflow.com/questions/3194534/joining-two-consecutive-lines-using-awk-or-sed
 
-svn up --depth=files; svn log --xml --stop-on-copy | grep -o "revision=\"[0-9]*\"\|<msg>.*</msg>" | sed -e "s/<[\/]*msg>//g" -e "s/revision=\"\([0-9]*\)\"/\1/" | awk '!(NR%2){print p " - " $0 }{p=$0}'
+# https://stackoverflow.com/questions/15930960/remove-eols-and-spaces-between-two-tags-in-xml-files
+# https://stackoverflow.com/a/15933785
+
+x='msg'
+
+svn up --depth=files; svn log --xml --stop-on-copy | sed -e '/<'"$x"'>/{:next;/<\/'"$x"'>/!{N;bnext;};s/\n//g;}' | grep -o "revision=\"[0-9]*\"\|<msg>.*</msg>" | sed -e "s/<[\/]*msg>//g" -e "s/revision=\"\([0-9]*\)\"/\1/" | awk '!(NR%2){print p " - " $0 }{p=$0}'
 
